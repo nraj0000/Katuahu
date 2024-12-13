@@ -1,0 +1,35 @@
+name: Run RAGNAROK Workflow
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  run_RAGNAROK_workflow:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        cpu: [4]
+    
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Set up RAGNAROK binaries
+        run: |
+          chmod +x RAGNAROK
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: Install required packages
+        run: |
+          pip install pymongo python-telegram-bot pyTelegramBotAPI certifi
+
+      - name: Run RAGNAROK.py
+        run: python3 RAGNAROK.py 
